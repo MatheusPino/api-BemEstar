@@ -33,14 +33,20 @@ jobs:
     needs: build
 
     steps:
-      - name: Build e Push da Imagem para DockerHub
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Login no DockerHub
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-          docker build -t meu-usuario/minha-aplicacao-staging .
-          docker push meu-usuario/minha-aplicacao-staging
-      - name: Deploy em Staging (Docker Compose)
+          echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+
+      - name: Build e Push da Imagem para o DockerHub (Staging)
         run: |
-          docker-compose -f docker-compose.yml up -d --build
+          docker build -t matheuspino/bem-estar-staging .
+          docker push matheuspino/bem-estar-staging
 
   deploy-production:
     name: Deploy para Produção
@@ -49,11 +55,17 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' }}
 
     steps:
-      - name: Build e Push da Imagem para DockerHub (Produção)
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Login no DockerHub
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-          docker build -t meu-usuario/minha-aplicacao-production .
-          docker push meu-usuario/minha-aplicacao-production
-      - name: Deploy em Produção (Docker Compose)
+          echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+
+      - name: Build e Push da Imagem para o DockerHub (Produção)
         run: |
-          docker-compose -f docker-compose.yml up -d --build
+          docker build -t matheuspino/bem-estar-production .
+          docker push matheuspino/bem-estar-production

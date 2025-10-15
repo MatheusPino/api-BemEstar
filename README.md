@@ -27,7 +27,7 @@ Siga os passos para executar a aplicação **Bem Estar** localmente utilizando o
 
 4. **Acesse a aplicação:**
    - A aplicação estará disponível em:  
-     👉 [http://localhost:8080](http://localhost:8080/swagger-ui/index.html)
+     👉 [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 
 ---
 
